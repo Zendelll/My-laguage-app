@@ -1,0 +1,11 @@
+{% if themes %}
+    <ul>
+    {% for theme in themes %}
+        <li><a href="{% url 'games:game' theme.id %}">{{ theme.name }}</a></li>
+    {% endfor %}
+    <li><a href="{% url 'games:random_game'%}">Random words</a></li>
+    </ul>
+{% else %}
+    <p>No themes yet.</p>
+    <li><a href="{% url 'games:random_game'%}">Random words</a></li>
+{% endif %}

@@ -1,0 +1,42 @@
+
+
+<script type="text/javascript">
+    
+
+    function handleIt() {
+        var alertTrue = document.getElementById("alertTrue");
+        var alertFalse = document.getElementById("alertFalse");
+
+        if (document.querySelector('input[name="choice"]:checked').value == "True"){
+            alertFalse.style.display = "none";
+            alertTrue.style.display = "block";
+        } else {
+            alertTrue.style.display = "none";
+            alertFalse.style.display = "block";
+        }
+    }
+
+</script>
+
+<form action="javascript:handleIt()">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>{{ main_word.word_name }}</h1></legend>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% for translation in translations %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{% if translation.word_name == main_word.word_name %}True{% else %}False{% endif %}">
+            <label for="choice{{ forloop.counter }}">{{ translation.main_translation }}</label><br>
+        {% endfor %}
+    </fieldset>
+    <input type="submit" value="Vote">
+</form>
+
+
+<div id="alertTrue" style="display:none"> 
+    <p>ВЕРНО</p>
+    <a href="{{request.path}}">Далее</a>
+</div>
+
+<div id ="alertFalse" style="display:none">
+    <p>НЕВЕРНО</p>
+</div>
