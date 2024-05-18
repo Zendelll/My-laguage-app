@@ -13,6 +13,7 @@ def index(request) -> HttpResponse:
 def game_random(request) -> HttpResponse:
     words = list(Word.objects.all())
     main_word = choice(words)
+    main_word.word_name = main_word.word_name.capitalize()
     words.remove(main_word)
 
     translations = [main_word]

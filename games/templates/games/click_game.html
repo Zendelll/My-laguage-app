@@ -1,42 +1,73 @@
+{% extends 'games/basic_template.html' %} 
 
+{% block 'title' %}Random translation{% endblock 'title' %}
 
-<script type="text/javascript">
+{% block 'body' %}
+<style> 
+    .shake {
+      position: relative;
+      animation-name: horizontal-shaking;
+      animation-duration: 500ms;
+      animation-iteration-count: 1;
+    }
     
+    @keyframes horizontal-shaking {
+        0% { transform: translateX(0) }
+        25% { transform: translateX(5px) }
+        50% { transform: translateX(-5px) }
+        75% { transform: translateX(5px) }
+        100% { transform: translateX(0) }
+    }   
+</style>
 
-    function handleIt() {
-        var alertTrue = document.getElementById("alertTrue");
-        var alertFalse = document.getElementById("alertFalse");
+<script type="text/javascript">    
+
+    function check_answer() {
+        var quizHeader = document.getElementById("quizHeader");
+        var quizForm = document.getElementById("quizForm");
+        var quizButton = document.getElementById("quizButton");
 
         if (document.querySelector('input[name="choice"]:checked').value == "True"){
-            alertFalse.style.display = "none";
-            alertTrue.style.display = "block";
+            void quizForm.offsetWidth;
+            quizHeader.classList.add('bg-success');
+            quizButton.classList.add('bg-success');
+            quizButton.innerHTML = "Далее"
+            setTimeout(test, 100);
         } else {
-            alertTrue.style.display = "none";
-            alertFalse.style.display = "block";
+            quizForm.classList.remove('shake');
+            void quizForm.offsetWidth;
+            quizForm.classList.add('shake');
         }
+    }
+    
+    function test() {
+        quizButton.href = "{{request.path}}"
     }
 
 </script>
-
-<form action="javascript:handleIt()">
-    {% csrf_token %}
-    <fieldset>
-        <legend><h1>{{ main_word.word_name }}</h1></legend>
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        {% for translation in translations %}
+<div class="container d-flex align-items-center justify-content-center" id="quizForm">
+    <div class="card mt-3 mx-2 rounded-4" style="width:200px">
+        <div class="card-header rounded-top-4" id="quizHeader">
+            <h2 class="card-title text-center">{{ main_word.word_name }}</h2>
+        </div>
+        <div class="card-body">
+            {% for translation in translations %}
             <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{% if translation.word_name == main_word.word_name %}True{% else %}False{% endif %}">
-            <label for="choice{{ forloop.counter }}">{{ translation.main_translation }}</label><br>
-        {% endfor %}
-    </fieldset>
-    <input type="submit" value="Vote">
-</form>
-
-
-<div id="alertTrue" style="display:none"> 
-    <p>ВЕРНО</p>
-    <a href="{{request.path}}">Далее</a>
+            <label for="choice{{ forloop.counter }}" class="h6">{{ translation.main_translation }}</label><br>
+            {% endfor %}
+            <a href="#" class="btn btn-primary container-fluid" onclick="check_answer()" id="quizButton">Ответить</a>
+        </div>
+    </div>
+    <div id="alertTrue" style="display:none"> 
+        <p>ВЕРНО</p>
+        <a href="{{request.path}}">Далее</a>
+    </div>
 </div>
 
-<div id ="alertFalse" style="display:none">
-    <p>НЕВЕРНО</p>
-</div>
+
+
+
+
+{% endblock 'body' %}
+
+
