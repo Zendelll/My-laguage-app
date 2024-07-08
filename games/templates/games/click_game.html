@@ -3,22 +3,6 @@
 {% block 'title' %}Random translation{% endblock 'title' %}
 
 {% block 'body' %}
-<style> 
-    .shake {
-      position: relative;
-      animation-name: horizontal-shaking;
-      animation-duration: 500ms;
-      animation-iteration-count: 1;
-    }
-    
-    @keyframes horizontal-shaking {
-        0% { transform: translateX(0) }
-        25% { transform: translateX(5px) }
-        50% { transform: translateX(-5px) }
-        75% { transform: translateX(5px) }
-        100% { transform: translateX(0) }
-    }   
-</style>
 
 <script type="text/javascript">    
 
@@ -55,7 +39,7 @@
             <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{% if translation.word_name == main_word.word_name %}True{% else %}False{% endif %}">
             <label for="choice{{ forloop.counter }}" class="h6">{{ translation.main_translation }}</label><br>
             {% endfor %}
-            <a href="#" class="btn btn-primary container-fluid" onclick="check_answer()" id="quizButton">Ответить</a>
+            <a href="#" class="btn btn-success container-fluid" onclick="check_answer()" id="quizButton">Ответить</a>
         </div>
     </div>
     <div id="alertTrue" style="display:none"> 

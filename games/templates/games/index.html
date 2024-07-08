@@ -39,7 +39,7 @@
                         <img class="card-img-top rounded-5 mt-2" src="https://static-00.iconduck.com/assets.00/perspective-dice-six-faces-random-icon-2048x2048-9uct7e7b.png" alt="Card image" >
                         <div class="card-body">
                           <h4 class="card-title text-center">Случайные слова</h4>
-                          <a href="{% url 'games:random_game'%}" class="btn btn-primary container-fluid">Начать</a>
+                          <a href="{% url 'games:random_game'%}" class="btn btn-success container-fluid">Начать</a>
                         </div>
                     </div>
 
@@ -49,7 +49,7 @@
                                 <img class="card-img-top rounded-5 mt-2" src="https://static-00.iconduck.com/assets.00/perspective-dice-six-faces-random-icon-2048x2048-9uct7e7b.png" alt="Card image" >
                                 <div class="card-body">
                                   <h4 class="card-title text-center">{{ theme.name }}</h4>
-                                  <a href="{% url 'games:game' theme.id %}" class="btn btn-primary container-fluid">Начать</a>
+                                  <a href="{% url 'games:game' theme.id %}" class="btn btn-success container-fluid">Начать</a>
                                 </div>
                             </div>
                         {% endfor %}

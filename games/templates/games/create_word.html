@@ -1,0 +1,141 @@
+{% extends 'games/basic_template.html' %} 
+
+{% block 'title' %}New word{% endblock 'title' %}
+
+{% block 'body' %}
+
+
+
+<div class="container d-flex align-items-center justify-content-center py-5" id="wordForm">
+    
+    <form class = "needs-validation" method="POST" action="{% url 'games:new_word' %}" autocomplete="off"> 
+        {% csrf_token %}
+        <h3 class="">Создать новое слово</h3>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1" req>Слово на испанском</span>
+            <input type="text" class="form-control" placeholder="Perrito" aria-describedby="basic-addon1" id="word_name" name="word_name" required>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Основной перевод</span>
+            <input type="text" class="form-control" placeholder="Собачка" aria-describedby="main_translation" id="main_translation" name="main_translation" required>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Другие переводы</span>
+            <input type="text" class="form-control" placeholder="Собака, пёс, пес" aria-describedby="basic-addon1" id="accepted_translation" name="accepted_translation">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Тип слова</span>
+            <select class="form-select" id="word_type" name="word_type" required>
+                <option value="" selected>Выбери тип слова...</option>
+                <option value="noun">Существительное</option>
+                <option value="verb" >Глагол</option>
+                <option value="adjective">Прилагательное</option>
+                <option value="adverb">Наречие</option>
+                <option value="preposition">Предлог</option>
+            </select>
+        </div>
+
+        <div id="verbSelected" class="d-none">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Спряжение глагола</span>
+                <select class="form-select" id="verb_type" name="verb_type" required>
+                    <option value="" selected>Выбери спряжение...</option>
+                    <option value="0">0. Инфинитив</option>
+                    <option value="1">1. Первое лицо единственное число</option>
+                    <option value="2">2. Второе лицо единственное число</option>
+                    <option value="3">3. Третье лицо единственное число</option>
+                    <option value="4">4. Первое лицо множественное число</option>
+                    <option value="5">5. Второе лицо множественное число</option>
+                    <option value="6">6. Третье лицо множественное число</option>
+                </select>
+            </div>
+            <div id="verbFormQuestions" class="d-none">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Инфинитив глагола</span>
+                    <select class="form-select" id="verb_base" name="verb_base" required>
+                        <option value="" selected>Выбери инфинитив...</option>
+                        {% for word in infinitives %}
+                        <option value="{{ word.id }}">{{ word.word_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Время глагола</span>
+                <select class="form-select" id="verb_tense" name="verb_tense" required>
+                    <option value="" selected>Выбери время...</option>
+                    <option value="present">🟰 Настоящее</option>
+                    <option value="past">↩️ Прошедшее</option>
+                    <option value="future">↪️ Будущее</option>
+                    <option value="potent">❔ Возможное</option>
+                </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="genderedWordSelected" class="d-none">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Род слова</span>
+                <select class="form-select" id="gender" name="gender" required>
+                    <option value="" selected>Выбери род слова...</option>
+                    <option value="m">♂️ Мужской род</option>
+                    <option value="f">♀️ Женский род</option>
+                    <option value="mf">⚤ Любой</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Автор</span>
+            <input type="text" class="form-control" placeholder="Ты не должен это видеть" aria-describedby="basic-addon1" value="Vlada" disabled>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-success" type="submit">Submit form</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    var verbSelected = document.getElementById("verbSelected")
+    var genderedWordSelected = document.getElementById("genderedWordSelected")
+    var verbFormQuestions = document.getElementById("verbFormQuestions")
+
+    document.getElementById("word_type").onchange = open_verb_or_noun_fields;
+    document.getElementById("verb_type").onchange = open_verb_form_fields;
+
+
+    function open_verb_or_noun_fields() {
+        var value = this.value
+        genderedWordSelected.classList.add("d-none")
+        verbSelected.classList.add("d-none")
+        disable_or_enable_elements(genderedWordSelected, true)
+        disable_or_enable_elements(verbSelected, true)
+
+        if (value == "verb") {
+            verbSelected.classList.remove("d-none")
+            disable_or_enable_elements(verbSelected)
+        }
+        else if (value == "noun" || value == "adjective") {
+            genderedWordSelected.classList.remove("d-none")
+            disable_or_enable_elements(genderedWordSelected)
+        }
+    }
+
+    function open_verb_form_fields() {
+        var value = this.value
+        verbFormQuestions.classList.add("d-none")
+        disable_or_enable_elements(verbFormQuestions, true)
+    
+        if (value && value != "0") {
+            verbFormQuestions.classList.remove("d-none")
+            disable_or_enable_elements(verbFormQuestions)
+        }
+    }
+
+    function disable_or_enable_elements(element, disable=false) {
+        element = element.getElementsByTagName('*')
+        for(var i = 0; i < element.length; i++){
+            element[i].disabled = disable;
+        }
+    }
+</script>
+
+{% endblock 'body' %}
