@@ -4,7 +4,13 @@ from .models import Word, Theme
 from random import choice, shuffle
 from django.db.models import Q
 
+def discard_session_vars(request):
+    request.session["theme_used_words"] = []
+    request.session["theme_success"] = 0
+    request.session.save()
+
 def index(request) -> HttpResponse:
+    discard_session_vars(request)
     themes_list = Theme.objects.order_by("name")    
     context = {"themes": themes_list}
     return render(request, "games/index.html", context)
