@@ -42,41 +42,6 @@ class Utils {
     }
 }
 
-class ChoiceGame {
-    static choice_game_check(url) {
-        var selectedChoice = document.querySelector('input[name="choice"]:checked')
-        var quizButton = document.getElementById("quizButton");
-
-        if (!selectedChoice) {
-            var quizForm = document.getElementById("quizForm");
-            Utils.shake(quizForm)
-        } 
-        else if ( selectedChoice && selectedChoice.value == "True") {
-            Utils.set_success_color([document.getElementById("quizHeader"), quizButton]);
-            Utils.disable_or_enable_elements(document.querySelectorAll('[name="choice"]'));
-            quizButton.innerHTML = "Далее";
-            setTimeout(Utils.change_url, 100, quizButton, url+"?theme_success=0");
-
-        } 
-        else {
-            if (quizButton.innerHTML != "Далее") {
-                var quizForm = document.getElementById("quizForm");
-                Utils.shake(quizForm)
-            }
-            
-            if (!url.includes("random")) {
-                Utils.set_error_color([document.getElementById("quizHeader"), quizButton]);
-                Utils.disable_or_enable_elements(document.querySelectorAll('[name="choice"]'));
-                quizButton.innerHTML = "Далее";
-                setTimeout(Utils.change_url, 100, quizButton, url);
-            }
-        }
-        
-    
-        
-    }
-}
-
 
 
 
