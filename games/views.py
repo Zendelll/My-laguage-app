@@ -78,9 +78,3 @@ def game_theme(request: HttpRequest, theme_id) -> HttpResponse:
     request.session["theme_success"] = 0
     request.session.save()
     return render(request, "games/click_game_win.html", context)
-        
-
-def new_word(request) -> HttpResponse:
-    infinitives = list(Word.objects.filter(verb_type="0").order_by('word_name'))
-    context = {"infinitives": infinitives}
-    return render(request, "games/create_word.html", context)

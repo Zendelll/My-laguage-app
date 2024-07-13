@@ -40,6 +40,17 @@ class Utils {
             element[i].disabled = disable
         }
     }
+
+    static switch_with_text(text_id_1, text_id_2, switch_id) {
+        var elements = [document.querySelector(`#${text_id_1}`), document.querySelector(`#${text_id_2}`)]
+        if (document.querySelector(`#${switch_id}`).checked) {
+            elements[0].classList.add("text-muted");
+            elements[1].classList.remove("text-muted");
+        } else {
+            elements[0].classList.remove("text-muted");
+            elements[1].classList.add("text-muted");
+        }
+    }
 }
 
 
