@@ -3,19 +3,6 @@
 {% block 'title' %}Games{% endblock 'title' %}
 
 {% block 'body' %}
-    <script>
-        function change_text_visibility() {
-            es_text = document.getElementById("game-translate-es-text");
-            ru_text = document.getElementById("game-translate-ru-text");
-            if (document.getElementById("game-translate-ru").checked) {
-                es_text.classList.add("text-muted");
-                ru_text.classList.remove("text-muted");
-            } else {
-                es_text.classList.remove("text-muted");
-                ru_text.classList.add("text-muted");
-            }
-        }
-    </script>
     <div id="accordion">
     
         <div class="card">
@@ -29,7 +16,7 @@
                 <div class="d-flex flex-row">
                     <div class="me-2" id="game-translate-es-text">Es-Ru</div>
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="game-translate-ru" onclick="change_text_visibility()">
+                        <input class="form-check-input" type="checkbox" id="game-translate-ru" onclick="Utils.switch_with_text('game-translate-es-text', 'game-translate-ru-text', 'game-translate-ru')">
                         <label class="form-check-label text-muted" for="game-translate-ru" id="game-translate-ru-text">Ru-Es</label>
                     </div>
                 </div>

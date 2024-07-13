@@ -1,0 +1,49 @@
+{% extends 'games/basic_template.html' %} 
+
+{% block 'title' %}New theme{% endblock 'title' %}
+
+{% block 'body' %}  
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'games/multiselect.css' %}">
+
+<div class="container d-flex align-items-center justify-content-center py-5" id="wordForm">
+    
+    <form class = "needs-validation" method="POST" action="{% url 'games:new_theme' %}" autocomplete="off"> 
+        {% csrf_token %}
+        <h3 class="">Создать новую тему</h3>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1" req>Название темы</span>
+            <input type="text" class="form-control" placeholder="Цвета" aria-describedby="basic-addon1" id="word_name" name="name" required>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1" req>Слова</span>
+            <select class="form-select" name="theme-words" multiple data-multi-select>
+                {% for word in words %}
+                        <option value="{{ word.id }}">{{ word }}{% if word.word_type == 'verb' %} v{% endif %}</option>
+                {% endfor %}
+              </select>
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Автор</span>
+            <input type="text" class="form-control" placeholder="Ты не должен это видеть" aria-describedby="basic-addon1" value="Vlada" disabled>
+        </div>
+        <div class="d-flex flex-row mb-1">
+            <div class="me-2" id="common-theme">Обычная тема</div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="theme-switch" name="theme-switch" value="verb" onclick="Utils.switch_with_text('common-theme', 'verb-theme', 'theme-switch')">
+                <label class="form-check-label text-muted" for="theme-switch" id="verb-theme">Тема для глаголов</label>
+            </div>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-success" type="submit">Отправить</button>
+        </div>
+    </form>
+</div>
+
+
+<script src="{% static 'games/multiselect.js' %}"></script>
+
+
+{% endblock 'body' %}

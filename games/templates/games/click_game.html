@@ -1,34 +1,41 @@
 {% extends 'games/basic_template.html' %} 
 
-{% block 'title' %}Random translation{% endblock 'title' %}
+{% block 'title' %}Click Game{% endblock 'title' %}
 
 {% block 'body' %}
 
-<script type="text/javascript">    
-
-    function check_answer() {
-        var quizHeader = document.getElementById("quizHeader");
-        var quizForm = document.getElementById("quizForm");
+<script>
+    function choice_game_check(url) {
+        var selectedChoice = document.querySelector('input[name="choice"]:checked')
         var quizButton = document.getElementById("quizButton");
 
-        if (document.querySelector('input[name="choice"]:checked').value == "True"){
-            void quizForm.offsetWidth;
-            quizHeader.classList.add('bg-success');
-            quizButton.classList.add('bg-success');
-            quizButton.innerHTML = "Далее"
-            setTimeout(test, 100);
-        } else {
-            quizForm.classList.remove('shake');
-            void quizForm.offsetWidth;
-            quizForm.classList.add('shake');
+        if (!selectedChoice) {
+            var quizForm = document.getElementById("quizForm");
+            Utils.shake(quizForm)
+        } 
+        else if ( selectedChoice && selectedChoice.value == "True") {
+            Utils.set_success_color([document.getElementById("quizHeader"), quizButton]);
+            Utils.disable_or_enable_elements(document.querySelectorAll('[name="choice"]'));
+            quizButton.innerHTML = "Далее";
+            setTimeout(Utils.change_url, 100, quizButton, url+"?theme_success=0");
+
+        } 
+        else {
+            if (quizButton.innerHTML != "Далее") {
+                var quizForm = document.getElementById("quizForm");
+                Utils.shake(quizForm)
+            }
+            
+            if (!url.includes("random")) {
+                Utils.set_error_color([document.getElementById("quizHeader"), quizButton]);
+                Utils.disable_or_enable_elements(document.querySelectorAll('[name="choice"]'));
+                quizButton.innerHTML = "Далее";
+                setTimeout(Utils.change_url, 100, quizButton, url);
+            }
         }
     }
-    
-    function test() {
-        quizButton.href = "{{request.path}}"
-    }
-
 </script>
+
 <div class="container d-flex align-items-center justify-content-center" id="quizForm">
     <div class="card mt-3 mx-2 rounded-4" style="width:200px">
         <div class="card-header rounded-top-4" id="quizHeader">
@@ -36,21 +43,13 @@
         </div>
         <div class="card-body">
             {% for translation in translations %}
-            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{% if translation.word_name == main_word.word_name %}True{% else %}False{% endif %}">
-            <label for="choice{{ forloop.counter }}" class="h6">{{ translation.main_translation }}</label><br>
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{% if translation == main_word.main_translation %}True{% else %}False{% endif %}">
+            <label for="choice{{ forloop.counter }}" class="h6">{{ translation }}</label><br>
             {% endfor %}
-            <a href="#" class="btn btn-success container-fluid" onclick="check_answer()" id="quizButton">Ответить</a>
+            <a href="#" class="btn btn-success container-fluid" onclick="choice_game_check({% if theme_id != None %}'{% url 'games:game' theme_id=theme_id %}'{% else %}'{% url 'games:random_game' %}'{% endif %})" id="quizButton">Ответить</a>
         </div>
     </div>
-    <div id="alertTrue" style="display:none"> 
-        <p>ВЕРНО</p>
-        <a href="{{request.path}}">Далее</a>
-    </div>
 </div>
-
-
-
-
 
 {% endblock 'body' %}
 

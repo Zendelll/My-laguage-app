@@ -1,0 +1,25 @@
+{% extends 'games/basic_template.html' %} 
+
+{% block 'title' %}Click game{% endblock 'title' %}
+
+{% block 'body' %}
+
+<div class="container d-flex align-items-center justify-content-center" id="quizForm">
+    <div class="card mt-3 mx-2 rounded-4" style="width:200px">
+        <div class="card-header rounded-top-4" id="quizHeader">
+            <h2 class="card-title text-center">Конец</h2>
+        </div>
+        <div class="card-body">
+            <p>Всего слов: {{words}}</p>
+            <p>Правильно: {{successes}} ({{percent}}%)</p>
+            {% for translation in translations %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{% if translation == main_word.main_translation %}True{% else %}False{% endif %}">
+            <label for="choice{{ forloop.counter }}" class="h6">{{ translation }}</label><br>
+            {% endfor %}
+            <div><a href="{% if theme_id != None %}{% url 'games:game' theme_id=theme_id %}{% else %}{% url 'games:random_game' %}{% endif %}" class="btn btn-success container-fluid mb-2" id="quizButton">Еще раз</a> </div>
+            <div><a href="{% url 'games:index' %}" class="btn btn-success container-fluid" id="quizButton">Выход</a> </div>
+        </div>
+    </div>
+</div>
+
+{% endblock 'body' %}
